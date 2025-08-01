@@ -2,3 +2,4 @@ llama.cpp
 AI_Agent/bin
 AI_Agent/obj
 publish_linux
+output.log
