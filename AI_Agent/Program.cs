@@ -10,7 +10,7 @@ Please prefer modern language features.
 
 """;
 
-string content = "Write nothing. Just stop working.";
+string content = "Write C# Hello World.";
 
 if(Console.IsInputRedirected)
 {
@@ -20,8 +20,10 @@ if(Console.IsInputRedirected)
 
 var messages = new List<TextMessage>()
 {
-    new TextMessage(Role.User, $"{role} {content}")
+    new TextMessage(Role.System, $"{role}"),
+    new TextMessage(Role.User, $"{content}")
 };
+
 var result = agent.GenerateReplyAsync(messages);
 var result_string = (result.Result as TextMessage).Content;
 

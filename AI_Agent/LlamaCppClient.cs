@@ -1,26 +1,30 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
+using AutoGen.Core;
 
 public class LlamaCppClient
 {
     private readonly HttpClient httpClient;
     private readonly string url;
 
-    public LlamaCppClient(string url = "http://localhost:8080/v1/completions")
+    public LlamaCppClient(string url = "http://localhost:8080/v1/chat/completions")
     {
         this.url = url;
         httpClient = new HttpClient();
         httpClient.Timeout = TimeSpan.FromSeconds(3600);
-
     }
 
-    public async Task<string> GenerateAsync(string prompt, int maxTokens = 4000, double temperature = 0.5)
+    public async Task<string> GenerateAsync(IEnumerable<IMessage> messages, int maxTokens = 4000, double temperature = 0.2)
     {
+        var messages_array = messages.Cast<TextMessage>().Select(c => new { role = c.Role.ToString(), content = c.Content }).ToArray();
+
         var requestBody = new
         {
-            prompt = prompt,
+            model = "openhermes",
+            temperature = temperature,
             max_tokens = maxTokens,
-            temperature = temperature
+            messages = messages_array
         };
 
         string json = JsonSerializer.Serialize(requestBody);
@@ -32,14 +36,17 @@ public class LlamaCppClient
         using var responseStream = await response.Content.ReadAsStreamAsync();
         using var doc = await JsonDocument.ParseAsync(responseStream);
 
-        // Safe extraction
+        string result = "";
+
         if (doc.RootElement.TryGetProperty("choices", out var choices) &&
             choices.GetArrayLength() > 0 &&
-            choices[0].TryGetProperty("text", out var text))
+            choices[0].TryGetProperty("message", out var message) &&
+            message.TryGetProperty("content", out var answer)
+            )
         {
-            return text.GetString() ?? "";
+            result = answer.GetString() ?? String.Empty;
         }
 
-        return "";
+        return result; 
     }
 }
