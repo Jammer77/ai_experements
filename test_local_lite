@@ -1,0 +1,7 @@
+./llama.cpp/build/bin/llama-cli -m ./llama.cpp/models/deepseek-coder-1.3b-instruct.Q5_K_M.gguf  -p "<s>[INST] <<SYS>> \
+You are an programmer. If I ask you write code, just write code, without additional comments before and after code. \
+<</SYS>> \
+### Instruction: \
+Напиши функцию на C#, которая сортирует массив чисел. Не пиши комментов. исключительно код. \
+### Response: \
+[/INST]"
