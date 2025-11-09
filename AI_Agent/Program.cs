@@ -2,26 +2,25 @@
 using AutoGen.Core;
 var agent = new LocalLlamaAgent();
 
-const string role = """
-You are C# coder. 
-Please write only code in the codeblock. 
-Don't add comment befor and after codeblock.
-Please prefer modern language features. 
-
+const string system = """
+user 
 """;
 
-string content = "Write C# Hello World.";
+string role = "You are an AI programming assistant...";
+string task = "Напиши на C# hello world приложение";
 
-if(Console.IsInputRedirected)
+if (Console.IsInputRedirected)
 {
     using var reader = new StreamReader(Console.OpenStandardInput());
-    content = reader.ReadToEnd();
+    task = reader.ReadToEnd();
 }
+
+string content = $"<s>[INST] <<SYS>>\n{role}\n<</SYS>>\n### Instruction:\n {task} \n### Response:\n[/INST]";
 
 var messages = new List<TextMessage>()
 {
-    new TextMessage(Role.System, $"{role}"),
-    new TextMessage(Role.User, $"{content}")
+    new TextMessage(Role.System, system),
+    new TextMessage(Role.User, content)
 };
 
 var result = agent.GenerateReplyAsync(messages);

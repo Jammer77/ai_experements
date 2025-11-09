@@ -1,1 +1,2 @@
-nohup ./llama.cpp/build/bin/llama-server -m ./llama.cpp/models/deepseek-coder-6.7b-instruct.Q5_K_M.gguf --port 8080 --host 0.0.0.0 --alias openhermes > output.log 2>&1 &
+#nohup ./llama.cpp/build/bin/llama-server -m ./llama.cpp/models/deepseek-coder-6.7b-instruct.Q5_K_M.gguf --port 8080 --host 0.0.0.0 --alias openhermes > output.log 2>&1 &
+nohup ./llama.cpp/build/bin/llama-server -m ./llama.cpp/models/deepseek-coder-1.3b-instruct.Q5_K_M.gguf --port 8080 --host 0.0.0.0 --alias openhermes > output.log 2>&1 &
