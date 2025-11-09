@@ -2,29 +2,29 @@
 using AutoGen.Core;
 var agent = new LocalLlamaAgent();
 
-const string system = """
-user 
-""";
+// const string system = """
+// user 
+// """;
 
-string role = "You are an AI programming assistant...";
+string role = "You are programmer...";
 string task = "Напиши на C# hello world приложение";
 
 if (Console.IsInputRedirected)
 {
-    using var reader = new StreamReader(Console.OpenStandardInput());
-    task = reader.ReadToEnd();
+    task = Console.In.ReadLine();
 }
 
-string content = $"<s>[INST] <<SYS>>\n{role}\n<</SYS>>\n### Instruction:\n {task} \n### Response:\n[/INST]";
+string content = $"<s>[INST] <<SYS>>\n{role}\n<</SYS>>\n### Instruction:\n{task}\n### Response:\n";
 
 var messages = new List<TextMessage>()
 {
-    new TextMessage(Role.System, system),
+    // new TextMessage(Role.System, system),
     new TextMessage(Role.User, content)
 };
 
 var result = agent.GenerateReplyAsync(messages);
 var result_string = (result.Result as TextMessage).Content;
+result_string = result_string.Replace("<|im_end|>", "").Trim(); //TODO 
 
 Console.WriteLine(result_string);
 
